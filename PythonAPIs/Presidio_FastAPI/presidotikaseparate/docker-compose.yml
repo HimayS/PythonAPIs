@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  tikaserver:
+    image: tikaserver  
+    container_name: tika
+    ports:
+      - "9998:9998"
+    networks:
+      - app-network
+
+  fastapi:
+    image: presidofast
+    container_name: fastapi
+    ports:
+      - "8000:8000"
+    depends_on:
+      - tikaserver
+    environment:
+      - TIKA_SERVER_URL=http://tikaserver:9998/
+    volumes:
+      - E:/Training_Dataset:/Dataset
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
